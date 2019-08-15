@@ -1,19 +1,59 @@
 import { Injectable } from '@angular/core';
 import {AngularFireAuth} from 'angularfire2/auth';
-import {AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
-import  { Observable} from "rxjs";
-import {AuthService} from "./auth.service";
+import {AngularFireDatabase, AngularFireList} from 'angularfire2/database';
+import { Observable} from 'rxjs';
+import {AuthService} from './auth.service';
 import * as firebase from 'firebase/app';
 
-import {ChatMessage} from  '../models/chat-message.model';
+import {ChatMessage} from '../models/chat-message.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
+  user: any;
+  chatMessages: AngularFireList<any>;
+  chatMessage: ChatMessage;
+  userName: Observable<string>;
 
-  sendMessage(message) {
-    console.log(message);
+  constructor(
+    private db: AngularFireDatabase,
+    private afAuth: AngularFireAuth
+  ) {
+    // this.afAuth.authState.subscribe(auth => {
+    //   if (auth !== undefined && auth !== null) {
+    //     this.user = auth;
+    //   }
+    // });
   }
-  constructor() { }
+
+  getMessages(): AngularFireList<ChatMessage[]> {
+    // query to create our message feed binding
+    // return this.db.list('messages');
+    return  this.db.list('/messages', ref => ref.orderByChild('size').equalTo('large'));
+  }
+
+  sendMessage(msg: string) {
+    const timestamp = this.getTimeStamp();
+    // const email = this.user.email;
+    const email = 'testtestes@gmail.com';
+    this.chatMessages = this.getMessages();
+    this.chatMessages.push({
+      message: msg,
+      timeSent: timestamp,
+      // userName: this.user.name,
+      userName: 'tester',
+      email: email
+    });
+
+    console.log('Called sendMessage()');
+  }
+
+  getTimeStamp() {
+    const now = new Date();
+    const date = now.getUTCFullYear() + '/' + (now.getUTCMonth() + 1) + '/' + now.getUTCDate();
+    const time = now.getUTCHours() + ':' + now.getUTCMinutes() + ':' + now.getUTCSeconds();
+
+    return(date + ' ' + time);
+  }
 }
