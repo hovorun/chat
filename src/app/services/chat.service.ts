@@ -30,7 +30,9 @@ export class ChatService {
   getMessages(): AngularFireList<ChatMessage[]> {
     // query to create our message feed binding
     // return this.db.list('messages');
-    return  this.db.list('/messages', ref => ref.orderByChild('size').equalTo('large'));
+    console.log(`-> calling getMessages`);
+    return  this.db.list('/messages', ref => ref.limitToLast(25).orderByKey());
+
   }
 
   sendMessage(msg: string) {
@@ -46,7 +48,7 @@ export class ChatService {
       email: email
     });
 
-    console.log('Called sendMessage()');
+    console.log('Called sendMessage().');
   }
 
   getTimeStamp() {
