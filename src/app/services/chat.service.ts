@@ -25,9 +25,9 @@ export class ChatService {
         this.user = auth;
       }
 
-      this.getUser().subscribe(a => {
-        this.userName = a.displayName;
-      });
+      // this.getUser().subscribe(a => {
+      //   this.userName = a.displayName;
+      // });
     });
   }
 
@@ -58,7 +58,7 @@ export class ChatService {
     this.chatMessages.push({
       message: msg,
       timeSent: timestamp,
-      userName: this.user.name,
+      userName: 'me',
       email: email
     });
 

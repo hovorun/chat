@@ -17,7 +17,7 @@ export class AuthService {
   constructor(private  afAuth: AngularFireAuth,
               private router: Router,
               private db: AngularFireDatabase) {
-    this.user = afAuth.user;
+    this.user = afAuth.authState;
   }
 
   get currentUserId(): string {
@@ -36,7 +36,7 @@ export class AuthService {
   signUp(email: string, password: string, displayName: string) {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
       .then((user) => {
-        this.authState = user;
+        this.authState = user.user;
         const status = 'online';
         this.setUserData(email, displayName, status);
       }).catch(error => console.log(error));
