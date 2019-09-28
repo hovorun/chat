@@ -24,17 +24,19 @@ export class ChatService {
       if (auth !== undefined && auth !== null) {
         this.user = auth;
       }
+      console.log(`->calling getUser from DB`);
+      this.getUser().subscribe( (a) => {
+        this.userName = a.displayName;
+        console.log(this.userName);
+      });
 
-      // this.getUser().subscribe(a => {
-      //   this.userName = a.displayName;
-      // });
     });
   }
 
   getUser() {
     const userId = this.user.uid;
-    const path = `/users/${userId}`;
-    return this.db.object(path);
+    const path = `/user/${userId}`;
+    return this.db.object(path).valueChanges();
   }
 
   getUsers() {
@@ -58,7 +60,7 @@ export class ChatService {
     this.chatMessages.push({
       message: msg,
       timeSent: timestamp,
-      userName: 'me',
+      userName: this.userName,
       email: email
     });
 
