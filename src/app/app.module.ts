@@ -25,6 +25,7 @@ import {environment} from '../environments/environment';
 
 import { ChatService } from './services/chat.service';
 import { AuthService } from './services/auth.service';
+import { ValidationComponent } from './validation/validation.component';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { AuthService } from './services/auth.service';
     NavbarComponent,
     UserItemComponent,
     ChatComponent,
-    UserListComponent
+    UserListComponent,
+    ValidationComponent
   ],
   imports: [
     BrowserModule,

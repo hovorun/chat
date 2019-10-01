@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from "../services/auth.service";
+import {Observable} from "rxjs";
+import * as firebase from "firebase/app";
 
 @Component({
   selector: 'app-navbar',
@@ -6,10 +9,29 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
+  user: Observable<firebase.User>;
+  userEmail: string;
+  userPassword: string;
 
-  constructor() { }
+  constructor(private authService: AuthService) {
+  }
 
   ngOnInit() {
+    this.user = this.authService.authUser();
+    this.user.subscribe(user => {
+      if (user) {
+        this.userEmail = user.email;
+
+      }
+    })
+  }
+
+  login() {
+    this.authService.login(this.userEmail,this.userPassword);
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
 }

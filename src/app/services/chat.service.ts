@@ -6,6 +6,7 @@ import {AuthService} from './auth.service';
 import * as firebase from 'firebase/app';
 
 import {ChatMessage} from '../models/chat-message.model';
+import {observableToBeFn} from "rxjs/internal/testing/TestScheduler";
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +26,8 @@ export class ChatService {
         this.user = auth;
       }
       console.log(`->calling getUser from DB`);
-      this.getUser().subscribe( (a) => {
-        this.userName = a.displayName;
+      this.getUser().subscribe( (data) => {
+        this.userName = data["displayName"];
         console.log(this.userName);
       });
 
@@ -40,8 +41,8 @@ export class ChatService {
   }
 
   getUsers() {
-    const path = `/users`;
-    return this.db.list(path);
+    const path = `/user`;
+    return this.db.list(path).valueChanges();
   }
 
 

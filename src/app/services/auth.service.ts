@@ -10,7 +10,7 @@ import {User} from '../models/user.model';
   providedIn: 'root'
 })
 export class AuthService {
-
+  USERID: string;
   private user: Observable<firebase.User>;
   private authState: any;
 
@@ -21,16 +21,30 @@ export class AuthService {
   }
 
   get currentUserId(): string {
+    console.log(`context in currentUserId`,this);
     return this.authState !== null ? this.authState.uid : '';
   }
 
+  logout() {
+    return this.afAuth.auth.signOut().then(resolve => {
+      const status = 'offline';
+      this.setUserStatus(status);
+      this.router.navigate(['login']);
+    });
+  }
+
   login(email: string, password: string) {
+
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
       .then((resolve) => {
         const status = 'online';
         this.setUserStatus(status);
         this.router.navigate(['chat']);
       });
+  }
+
+  authUser() {
+    return this.user;
   }
 
   signUp(email: string, password: string, displayName: string) {
@@ -59,6 +73,8 @@ export class AuthService {
     const data = {
       status: status
     };
+     this.db.object(path).update(data)
+      .catch(error => console.log(error));
   }
 }
 
