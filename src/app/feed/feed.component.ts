@@ -1,8 +1,5 @@
 import {Component, OnChanges, OnInit} from '@angular/core';
 import {ChatService} from '../services/chat.service';
-import {Observable} from 'rxjs';
-import {ChatMessage} from '../models/chat-message.model';
-import {AngularFireList} from 'angularfire2/database';
 
 
 @Component({
