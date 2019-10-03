@@ -10,7 +10,6 @@ import {User} from '../models/user.model';
   providedIn: 'root'
 })
 export class AuthService {
-  USERID: string;
   private user: Observable<firebase.User>;
   private authState: any;
 
@@ -21,25 +20,29 @@ export class AuthService {
   }
 
   get currentUserId(): string {
-    console.log(`context in currentUserId`,this);
+    console.log(`context in currentUserId`);
     return this.authState !== null ? this.authState.uid : '';
   }
 
   logout() {
-    return this.afAuth.auth.signOut().then(resolve => {
+    return this.afAuth.auth.signOut().then((resolve) => {
       const status = 'offline';
       this.setUserStatus(status);
+      console.log(`userId is:`,this.currentUserId);
       this.router.navigate(['login']);
+      console.log('navigated');
     });
   }
 
   login(email: string, password: string) {
-
-    return this.afAuth.auth.signInWithEmailAndPassword(email, password)
-      .then((resolve) => {
-        const status = 'online';
+    return this.afAuth.auth.signInWithEmailAndPassword(email, password).then((user) => {
+        this.authState = user.user;
+      console.log(`user is:`,user);
+      console.log(`UserID from db`,this.authState.uid);
+      console.log(`userId is:`,this.currentUserId);
+      const status = 'online';
         this.setUserStatus(status);
-        this.router.navigate(['chat']);
+        this.router.navigateByUrl('/chat');
       });
   }
 
@@ -51,6 +54,7 @@ export class AuthService {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
       .then((user) => {
         this.authState = user.user;
+        console.log(`userId is:`,this.currentUserId);
         const status = 'online';
         this.setUserData(email, displayName, status);
       }).catch(error => console.log(error));
