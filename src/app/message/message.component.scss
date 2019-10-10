@@ -1,16 +1,17 @@
 .messageContainer{
   display: flex;
+  flex-direction: column;
   height: auto;
   width: 70%;
   min-width: 400px;
   border-radius: 5px;
   align-items:stretch;
-  background-color: #eee;
+  background-color: #182533;
   box-shadow: 0 3px 6px rgba(0,0,0,0.26), 0 3px 6px rgba(0,0,0,0.23);
 }
 
 .isOwnMessageContainer{
-  background-color: #01579B;
+  background-color: #2b5278;
 }
 
 .messageData{
@@ -21,7 +22,7 @@
 
 .sender{
   display: block;
-  color: #222;
+  color: #3e88b3;
   font-weight: bold;
 }
 
@@ -41,13 +42,14 @@
 .messageContent{
   height: auto;
   flex: 9;
-  background-color: #fff;
+  color: #fff;
+  background-color: #182533;
   padding: 10px;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
 }
 
 .isOwnMessageContent{
-  background-color: #E3F2FD;
-  color: #01579B;
+  background-color: #2b5278;
+  color: #fff;
 }
