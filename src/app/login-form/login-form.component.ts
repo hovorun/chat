@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
-import {AuthService} from "../services/auth.service";
 
 @Component({
   selector: 'app-login-form',
@@ -10,14 +9,40 @@ import {AuthService} from "../services/auth.service";
 export class LoginFormComponent {
   email: string;
   password: string;
-  errorMsg: string;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private router: Router) {
   }
 
-  login() {
-    console.log('login() called from login-form component');
-    this.authService.login(this.email, this.password)
-      .catch(error => this.errorMsg = error.message);
+  public loginAction() {
+    this.myLogin()
+      .then(response => {
+        console.log(`response is: ${response}`);
+        if(response == "true") {
+            this.router.navigateByUrl('/chat');
+        } else {
+          console.log(`not logged!`);
+        }
+    }).catch(e => {
+      console.log(e);
+    });
+  }
+  public async myLogin() {
+    const loginData = {
+      email: this.email,
+      password: this.password,
+    };
+    try {
+      const request = await fetch(`http://localhost:8080/login`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify(loginData),
+      });
+      return await request.text();
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
+
